@@ -3,8 +3,8 @@
 #include <iostream>
 
 void iterateThroughDirectory(std::string dir) {
-    for (auto const &dirEntry :
-         std::filesystem::recursive_directory_iterator(dir)) {
+    for (auto const &dirEntry : std::filesystem::recursive_directory_iterator(
+             dir, std::filesystem::directory_options::skip_permission_denied)) {
         std::cout << dirEntry << '\n';
     }
 }

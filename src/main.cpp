@@ -8,7 +8,6 @@ int main(int argc, char *argv[]) {
     validateDirectory(pathToRoot);
     iterateThroughDirectory(pathToRoot);
 
-    // Recursively Walk Filesystem
     // Calculate SHA256 hash for each file
     // Find Duplicates
     // Optionally delete files
