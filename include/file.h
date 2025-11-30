@@ -1,8 +1,10 @@
 #ifndef FILE_H
 #define FILE_H
-#include <string>
-void iterateThroughDirectory(std::string dir);
 
-void validateDirectory(std::string dir);
+#include <cstdint>
+#include <filesystem>
 
+bool isRegularFile(std::filesystem::directory_entry file);
+
+std::uintmax_t getFileSize(std::filesystem::directory_entry file);
 #endif
