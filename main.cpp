@@ -5,10 +5,7 @@
 int main(int argc, char *argv[]) {
 
     std::string pathToRoot = parseCLI(argc, argv);
-    if (!validateDirectory(pathToRoot)) {
-        std::cout << "Error: " << pathToRoot << " is not a directory." << '\n';
-        exit(EXIT_FAILURE);
-    }
+    validateDirectory(pathToRoot);
     iterateThroughDirectory(pathToRoot);
 
     // Recursively Walk Filesystem

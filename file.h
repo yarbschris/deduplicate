@@ -1,8 +1,8 @@
 #ifndef FILE_H
 #define FILE_H
 #include <string>
-void iterateThroughDirectory(std::string path);
+void iterateThroughDirectory(std::string dir);
 
-bool validateDirectory(std::string path);
+void validateDirectory(std::string dir);
 
 #endif

@@ -2,16 +2,16 @@
 #include <filesystem>
 #include <iostream>
 
-void iterateThroughDirectory(std::string path) {
+void iterateThroughDirectory(std::string dir) {
     for (auto const &dirEntry :
-         std::filesystem::recursive_directory_iterator(path)) {
+         std::filesystem::recursive_directory_iterator(dir)) {
         std::cout << dirEntry << '\n';
     }
 }
 
-bool validateDirectory(std::string path) {
-    if (!std::filesystem::is_directory(path))
-        return false;
-
-    return true;
+void validateDirectory(std::string dir) {
+    if (!std::filesystem::is_directory(dir)) {
+        std::cerr << "Error: " << dir << " is not a directory.\n";
+        exit(EXIT_FAILURE);
+    }
 }
