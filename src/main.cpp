@@ -10,8 +10,6 @@ int main(int argc, char *argv[]) {
     iterateThroughDirectory(pathToRoot);
     printFileMap();
 
-    // Put files into groups by size
-
     // If 2+ have same size: Calculate SHA256 hash for each file
     // Compare Hashes in each group with 2+ to find duplicates
     // Optionally delete files
