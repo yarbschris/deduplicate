@@ -6,6 +6,8 @@
 #include <iostream>
 
 void iterateThroughDirectory(std::string dir) {
+    // Recursively Iterate Through Directory, Ignore entires where permission is
+    // denied
     for (auto const &dirEntry : std::filesystem::recursive_directory_iterator(
              dir, std::filesystem::directory_options::skip_permission_denied)) {
         addToFileMap(dirEntry);
