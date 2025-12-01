@@ -2,7 +2,9 @@
 #define ENCRYPT_H
 
 #include <filesystem>
+#include <fstream>
 
-void outputBinary(std::filesystem::path filePath);
+bool outputBinary(std::filesystem::path filePath);
+std::vector<char> readBinary(std::filesystem::path filePath);
 
 #endif
