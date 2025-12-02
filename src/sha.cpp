@@ -70,7 +70,7 @@ class SHA256 {
     // Pad: Ensure message length is a multiple of 512 with last 64 bits
     // encoding the original message length
     void pad(std::vector<uint8_t> *bits) {
-        int originalLength = bits->size() * 8;
+        int64_t originalLength = bits->size() * 8;
 
         // Append '1' bit
         bits->push_back(0x80);
@@ -83,14 +83,8 @@ class SHA256 {
             bits->push_back(0x0);
         }
 
-        for (auto x : *bits) {
-            std::cout << std::bitset<8>(x);
-        }
-        std::cout << '\n';
-
         // Encode original length as 64 bits and append it to our vector
-        for (int i = 8; i > 0; i--) {
-            // TODO: This is incorrect
+        for (int i = 7; i >= 0; i--) {
             bits->push_back((originalLength >> (i * 8)) & 0xFF);
         }
     }
@@ -98,10 +92,6 @@ class SHA256 {
     // Process Step: Parse message into 512 bit blocks
     // Each chunk will point to the start of a 512 bit block
     void process(std::vector<uint8_t> &padded) {
-        for (auto x : padded) {
-            std::cout << std::bitset<8>(x);
-        }
-        std::cout << '\n';
         for (size_t offset = 0; offset < padded.size(); offset += 64) {
             const uint8_t *chunk = &padded[offset];
             processChunk(chunk);
