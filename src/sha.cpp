@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <iostream>
 #include <vector>
 
 class SHA256 {
@@ -64,8 +65,9 @@ class SHA256 {
         // Append '1' bit
         bits.push_back(0x80);
 
-        // Append '0' bits until we have 64 bits (8 bytes) left with which to
-        // encode our original length
+        // Append '0' bits until we have 64 bits left with which to encode our
+        // original length (mod by 64 (512 bits), result will be 56 (448 bits)
+        // if we have 64 bits remaining)
 
         while (bits.size() % 64 != 56) {
             bits.push_back(0x0);
@@ -78,4 +80,14 @@ class SHA256 {
 
         return bits;
     }
+
+    // Process Step: Parse message into 512 bit blocks
+    void process(std::vector<uint8_t> &padded) {
+        for (size_t offset = 0; offset < padded.size(); offset += 64) {
+            const uint8_t *chunk = &padded[offset];
+            processChunk(chunk);
+        }
+    }
+
+    void processChunk(const uint8_t *chunk) { std::cout << "Processing Chunk"; }
 };
