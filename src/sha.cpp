@@ -6,20 +6,30 @@ class SHA256 {
   public:
     SHA256() { reset(); }
     void reset() {
-        // Initialize buffers
-        state[0] = 0x6a09e667;
-        state[1] = 0xbb67ae85;
-        state[2] = 0x3c6ef372;
-        state[3] = 0xa54ff53a;
-        state[4] = 0x510e527f;
-        state[5] = 0x9b05688c;
-        state[6] = 0x1f83d9ab;
-        state[7] = 0x5be0cd19;
+        // Initialize has value
+        H[0] = 0x6a09e667; // A
+        H[1] = 0xbb67ae85; // B
+        H[2] = 0x3c6ef372; // C
+        H[3] = 0xa54ff53a; // D
+        H[4] = 0x510e527f; // E
+        H[5] = 0x9b05688c; // F
+        H[6] = 0x1f83d9ab; // G
+        H[7] = 0x5be0cd19; // H
+    }
+
+    void calculateHash(std::vector<uint8_t> bits) {
+        pad(&bits);
+        process(bits);
+    }
+
+    void getHash() {
+        std::cout << std::hex << H[0] << H[1] << H[2] << H[3] << H[4] << H[5]
+                  << H[6] << H[7];
     }
 
   private:
     // Hash Buffers
-    uint32_t state[8];
+    uint32_t H[8];
 
     // Functions needed for SHA-256
     uint32_t Ch(uint32_t x, uint32_t y, uint32_t z) {
@@ -43,7 +53,7 @@ class SHA256 {
     uint32_t sig1(uint32_t x) { return ROTR(x, 17) ^ ROTR(x, 19) ^ SHR(x, 10); }
 
     // Constants for SHA-256
-    static constexpr uint32_t k[64] = {
+    static constexpr uint32_t K[64] = {
         0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1,
         0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
         0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786,
@@ -59,29 +69,28 @@ class SHA256 {
     // Preprocessing Steps
     // Pad: Ensure message length is a multiple of 512 with last 64 bits
     // encoding the original message length
-    std::vector<uint8_t> pad(std::vector<uint8_t> bits) {
-        int originalLength = bits.size() * 8;
+    void pad(std::vector<uint8_t> *bits) {
+        int originalLength = bits->size() * 8;
 
         // Append '1' bit
-        bits.push_back(0x80);
+        bits->push_back(0x80);
 
         // Append '0' bits until we have 64 bits left with which to encode our
         // original length (mod by 64 (512 bits), result will be 56 (448 bits)
         // if we have 64 bits remaining)
 
-        while (bits.size() % 64 != 56) {
-            bits.push_back(0x0);
+        while (bits->size() % 64 != 56) {
+            bits->push_back(0x0);
         }
 
         // Encode original length as 64 bits and append it to our vector
         for (int i = 7; i > 0; i--) {
-            bits.push_back((originalLength >> (i * 8)) & 0xFF);
+            bits->push_back((originalLength >> (i * 8)) & 0xFF);
         }
-
-        return bits;
     }
 
     // Process Step: Parse message into 512 bit blocks
+    // Each chunk will point to the start of a 512 bit block
     void process(std::vector<uint8_t> &padded) {
         for (size_t offset = 0; offset < padded.size(); offset += 64) {
             const uint8_t *chunk = &padded[offset];
@@ -89,5 +98,56 @@ class SHA256 {
         }
     }
 
-    void processChunk(const uint8_t *chunk) { std::cout << "Processing Chunk"; }
+    // Process Each Chunk
+    void processChunk(const uint8_t *chunk) {
+        // Prepare Message Schedule
+        uint32_t W[64];
+
+        // First 16 words of message schdule are just the first 16 32 bit words
+        for (int i = 0; i < 16; i++) {
+            int j = i * 4;
+            W[i] = (static_cast<uint32_t>(chunk[j]) << 24) |
+                   (static_cast<uint32_t>(chunk[j + 1]) << 16) |
+                   (static_cast<uint32_t>(chunk[j + 2]) << 8) |
+                   (static_cast<uint32_t>(chunk[j + 3]));
+        }
+
+        // Next 48 words calculated by this formula from paper
+        for (int i = 16; i < 64; i++) {
+            W[i] = sig1(W[i - 2]) + W[i - 7] + sig0(W[i - 15]) + W[i - 16];
+        }
+
+        uint32_t a = H[0];
+        uint32_t b = H[1];
+        uint32_t c = H[2];
+        uint32_t d = H[3];
+        uint32_t e = H[4];
+        uint32_t f = H[5];
+        uint32_t g = H[6];
+        uint32_t h = H[7];
+
+        // Start computing hashes formula from textbook
+        for (int i = 0; i < 64; i++) {
+            uint32_t T1 = h + ep1(e) + Ch(e, f, g) + K[i] + W[i];
+            uint32_t T2 = ep0(a) + Maj(a, b, c);
+            h = g;
+            g = f;
+            f = e;
+            e = d + T1;
+            d = c;
+            c = b;
+            b = a;
+            a = T1 + T2;
+        }
+
+        // After this is done, update hash values
+        H[0] += a;
+        H[1] += b;
+        H[2] += c;
+        H[3] += d;
+        H[4] += e;
+        H[5] += f;
+        H[6] += g;
+        H[7] += h;
+    }
 };
