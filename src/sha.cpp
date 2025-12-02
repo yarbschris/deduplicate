@@ -15,12 +15,12 @@ void SHA256::reset() {
     H[5] = 0x9b05688c; // F
     H[6] = 0x1f83d9ab; // G
     H[7] = 0x5be0cd19; // H
-};
+}
 
-void SHA256::calculateHash(std::vector<uint8_t> bits) {
-    pad(&bits);
-    process(bits);
-};
+void SHA256::calculateHash(std::vector<uint8_t> bitVector) {
+    pad(&bitVector);
+    process(bitVector);
+}
 
 std::vector<uint32_t> SHA256::getHashVector() {
     return std::vector<uint32_t>{H[0], H[1], H[2], H[3],
@@ -43,9 +43,9 @@ uint32_t SHA256::Maj(uint32_t x, uint32_t y, uint32_t z) {
     return (x & y) ^ (x & z) ^ (y & z);
 }
 
-uint32_t SHA256::SHR(uint32_t x, int n) { return x >> n; }
+uint32_t SHA256::SHR(uint32_t x, int n) { return x >> n; };
 
-uint32_t SHA256::ROTR(uint32_t x, int n) { return (x >> n) | (x << (32 - n)); }
+uint32_t SHA256::ROTR(uint32_t x, int n) { return (x >> n) | (x << (32 - n)); };
 
 uint32_t SHA256::ep0(uint32_t x) {
     return ROTR(x, 2) ^ ROTR(x, 13) ^ ROTR(x, 22);
@@ -68,23 +68,23 @@ uint32_t SHA256::sig1(uint32_t x) {
 // Preprocessing Steps
 // Pad: Ensure message length is a multiple of 512 with last 64 bits
 // encoding the original message length
-void SHA256::pad(std::vector<uint8_t> *bits) {
-    int64_t originalLength = bits->size() * 8;
+void SHA256::pad(std::vector<uint8_t> *bitVector) {
+    int64_t originalLength = bitVector->size() * 8;
 
     // Append '1' bit
-    bits->push_back(0x80);
+    bitVector->push_back(0x80);
 
     // Append '0' bits until we have 64 bits left with which to encode our
     // original length (mod by 64 (512 bits), result will be 56 (448 bits)
     // if we have 64 bits remaining)
 
-    while (bits->size() % 64 != 56) {
-        bits->push_back(0x0);
+    while (bitVector->size() % 64 != 56) {
+        bitVector->push_back(0x0);
     }
 
     // Encode original length as 64 bits and append it to our vector
     for (int i = 7; i >= 0; i--) {
-        bits->push_back((originalLength >> (i * 8)) & 0xFF);
+        bitVector->push_back((originalLength >> (i * 8)) & 0xFF);
     }
 }
 
@@ -149,6 +149,4 @@ void SHA256::processChunk(const uint8_t *chunk) {
     H[5] += f;
     H[6] += g;
     H[7] += h;
-};
 }
-;
