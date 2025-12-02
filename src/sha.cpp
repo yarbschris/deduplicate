@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <vector>
 
 class SHA256 {
   public:
@@ -53,4 +54,28 @@ class SHA256 {
         0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a,
         0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
         0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
+
+    // Preprocessing Steps
+    // Pad: Ensure message length is a multiple of 512 with last 64 bits
+    // encoding the original message length
+    std::vector<uint8_t> pad(std::vector<uint8_t> bits) {
+        int originalLength = bits.size() * 8;
+
+        // Append '1' bit
+        bits.push_back(0x80);
+
+        // Append '0' bits until we have 64 bits (8 bytes) left with which to
+        // encode our original length
+
+        while (bits.size() % 64 != 56) {
+            bits.push_back(0x0);
+        }
+
+        // Encode original length as 64 bits and append it to our vector
+        for (int i = 7; i > 0; i--) {
+            bits.push_back((originalLength >> (i * 8)) & 0xFF);
+        }
+
+        return bits;
+    }
 };
