@@ -8,6 +8,8 @@ extern std::unordered_map<std::uintmax_t, std::vector<std::filesystem::path>>
     fileMap;
 
 void addToFileMap(std::filesystem::directory_entry file);
+void removeFileMapSingleEntries();
+
 void printFileMap();
 
 #endif

@@ -1,6 +1,4 @@
 #include "directory.h"
-#include "encrypt.h"
-#include "file.h"
 #include "map.h"
 #include <filesystem>
 #include <iostream>
@@ -11,7 +9,6 @@ void iterateThroughDirectory(std::string dir) {
     for (auto const &dirEntry : std::filesystem::recursive_directory_iterator(
              dir, std::filesystem::directory_options::skip_permission_denied)) {
         addToFileMap(dirEntry);
-        outputBinary(dirEntry.path());
     }
 }
 

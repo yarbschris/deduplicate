@@ -27,13 +27,25 @@ void addToFileMap(std::filesystem::directory_entry file) {
     }
 }
 
-void printFileMap() {
-    // Create Iterator for unordered_map
+void removeFileMapSingleEntries() {
     std::unordered_map<std::uintmax_t,
                        std::vector<std::filesystem::path>>::iterator it =
         fileMap.begin();
 
-    // Iterate through map, print size: (path vector contents)
+    while (it != fileMap.end()) {
+        if (it->second.size() < 2) {
+            it = fileMap.erase(it);
+            continue;
+        }
+        it++;
+    }
+}
+
+void printFileMap() {
+    std::unordered_map<std::uintmax_t,
+                       std::vector<std::filesystem::path>>::iterator it =
+        fileMap.begin();
+
     while (it != fileMap.end()) {
         std::cout << it->first << ": ";
         for (auto i : it->second) {

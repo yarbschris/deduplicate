@@ -8,9 +8,10 @@ int main(int argc, char *argv[]) {
     std::string pathToRoot = parseCLI(argc, argv);
     validateDirectory(pathToRoot);
     iterateThroughDirectory(pathToRoot);
+    removeFileMapSingleEntries();
     printFileMap();
 
-    // If 2+ have same size: Calculate SHA256 hash for each file
+    // Calculate SHA256 hash for each file
     // Compare Hashes in each group with 2+ to find duplicates
     // Optionally delete files
 
