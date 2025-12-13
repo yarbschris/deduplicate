@@ -55,3 +55,15 @@ void printFileMap() {
         it++;
     }
 }
+
+void computeHashes() {
+    std::unordered_map<std::uintmax_t, std::vector<struct file>>::iterator it =
+        fileMap.begin();
+
+    while (it != fileMap.end()) {
+        for (auto file : it->second) {
+            file.computeHash();
+        }
+        it++;
+    }
+}

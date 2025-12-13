@@ -11,4 +11,6 @@ void removeFileMapSingleEntries();
 
 void printFileMap();
 
+void computeHashes();
+
 #endif

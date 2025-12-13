@@ -7,6 +7,7 @@
 struct file {
     std::filesystem::directory_entry entry;
     std::vector<uint32_t> hash;
+    void computeHash();
 };
 
 bool isRegularFile(std::filesystem::directory_entry file);

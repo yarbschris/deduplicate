@@ -44,4 +44,5 @@ class SHA256 {
     void processChunk(const uint8_t *chunk);
 };
 
+SHA256 sha = SHA256();
 #endif

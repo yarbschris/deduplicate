@@ -1,7 +1,6 @@
 #include "cli.h"
 #include "directory.h"
 #include "map.h"
-#include "sha.h"
 #include <cstdint>
 #include <cstdlib>
 
@@ -11,8 +10,7 @@ int main(int argc, char *argv[]) {
     validateDirectory(pathToRoot);
     iterateThroughDirectory(pathToRoot);
     removeFileMapSingleEntries();
-    printFileMap();
-    SHA256 sha = SHA256();
+    computeHashes();
 
     // For Each Group (Vector in remaining file map):
     //      Convert File Contents into vector of uint8_t
