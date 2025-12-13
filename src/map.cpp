@@ -13,10 +13,9 @@ std::unordered_map<std::uintmax_t, std::vector<struct file>> fileMap;
 void addToFileMap(std::filesystem::directory_entry file) {
     if (isRegularFile(file)) {
         uintmax_t fileSize = file.file_size();
-        std::filesystem::path filePath = file.path();
 
         struct file curr;
-        curr.path = filePath;
+        curr.entry = file;
 
         // Lookup if key is already in map, append to vector if so
         if (fileMap.count(fileSize) != 0) {
@@ -49,7 +48,7 @@ void printFileMap() {
     while (it != fileMap.end()) {
         std::cout << it->first << ": ";
         for (auto file : it->second) {
-            std::cout << file.path << " | ";
+            std::cout << file.entry.path() << " | ";
         }
         std::cout << '\n';
 

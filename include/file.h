@@ -5,7 +5,7 @@
 #include <filesystem>
 
 struct file {
-    std::filesystem::path path;
+    std::filesystem::directory_entry entry;
     std::vector<uint32_t> hash;
 };
 
