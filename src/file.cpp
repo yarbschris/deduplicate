@@ -20,9 +20,9 @@ void file::computeHash() {
         contents.push_back(stream.get());
     }
 
+    SHA256 sha = SHA256();
     sha.calculateHash(contents);
     hash = sha.getHashVector();
     std::cout << entry.path() << ": ";
     sha.printHash();
-    sha.reset();
 }

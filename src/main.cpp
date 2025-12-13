@@ -1,7 +1,6 @@
 #include "cli.h"
 #include "directory.h"
 #include "map.h"
-#include <cstdint>
 #include <cstdlib>
 
 int main(int argc, char *argv[]) {
