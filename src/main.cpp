@@ -1,6 +1,8 @@
 #include "cli.h"
 #include "directory.h"
 #include "map.h"
+#include "sha.h"
+#include <cstdint>
 #include <cstdlib>
 
 int main(int argc, char *argv[]) {
@@ -10,9 +12,14 @@ int main(int argc, char *argv[]) {
     iterateThroughDirectory(pathToRoot);
     removeFileMapSingleEntries();
     printFileMap();
+    SHA256 sha = SHA256();
 
-    // Calculate SHA256 hash for each file
-    // Compare Hashes in each group with 2+ to find duplicates
+    // For Each Group (Vector in remaining file map):
+    //      Convert File Contents into vector of uint8_t
+    //      Compute File Hashes
+    //      Compare Hashes to detect duplicates
+    //
+    // Report Duplicates
     // Optionally delete files
 
     return 0;

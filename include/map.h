@@ -4,8 +4,7 @@
 #include <filesystem>
 #include <unordered_map>
 
-extern std::unordered_map<std::uintmax_t, std::vector<std::filesystem::path>>
-    fileMap;
+extern std::unordered_map<std::uintmax_t, std::vector<struct file>> fileMap;
 
 void addToFileMap(std::filesystem::directory_entry file);
 void removeFileMapSingleEntries();
