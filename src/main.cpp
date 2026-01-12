@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
     validateDirectory(pathToRoot);
     iterateThroughDirectory(pathToRoot);
     removeFileMapSingleEntries();
+
     computeHashes();
 
     // For Each Group (Vector in remaining file map):
